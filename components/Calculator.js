@@ -1,37 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { Text, SafeAreaView, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import calculate from '../utils/calculate'; 
-
-
-const Row = ({ children }) => <View style={styles.row}>{children}</View>;
-
-
-const BTN_MARGIN = 5
-const screen = Dimensions.get("window")
-const buttonWidth = screen.width / 4 - BTN_MARGIN * 2
-
-const Button = ({ value, buttonStyle, onPress }) => {
-  const btnStyles = [styles.btn];
-  const txtStyles = [styles.btnText];
-
-  if (buttonStyle === "secondary") {
-    btnStyles.push(styles.btnSecondary);
-    txtStyles.push(styles.btnTextSecondary);
-  }
-  if (buttonStyle === "accent") {
-    btnStyles.push(styles.btnAccent);
-  }
-  if (buttonStyle === "double") {
-    btnStyles.push(styles.btnDouble);
-  }
-
-  return (
-    <TouchableOpacity style={btnStyles} onPress={() => onPress(value)}>
-      <Text style={txtStyles}>{value}</Text>
-    </TouchableOpacity>
-  );
-};
+import calculate from '../utils/calculate';
+import Button from './button';
+import Row from './row';
 
 const styles = StyleSheet.create({
   container: {
@@ -45,39 +17,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     marginRight: 20,
     marginBottom: 10,
-  },
-  row: {
-    flexDirection: "row",
-  },
-  btn: {
-    backgroundColor: "#333333",
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    margin: BTN_MARGIN,
-    borderRadius: 100,
-    height: buttonWidth,
-  },
-  btnText: {
-    color: "#fff",
-    fontSize: 35,
-    fontWeight: "500",
-  },
-  btnSecondary: {
-    backgroundColor: "#a6a6a6",
-  },
-  btnTextSecondary: {
-    color: "#060606",
-  },
-  btnAccent: {
-    backgroundColor: "#f09a36",
-  },
-  btnDouble: {
-    alignItems: "flex-start",
-    flex: 0,
-    width: buttonWidth  * 2 + BTN_MARGIN  * 2,
-    paddingLeft: buttonWidth / 2 - BTN_MARGIN * 1.5,
-  },
+  }
 });
 
 const Calculator = () => {
@@ -94,7 +34,7 @@ const Calculator = () => {
         setDisplayValue(displayValue + value);
       }
       setWaitingForOperand(false);
-    } else { 
+    } else {
       switch (value) {
         case 'C':
           setDisplayValue('0');
@@ -137,15 +77,16 @@ const Calculator = () => {
     }
   };
 
+  const changedValue = displayValue === '0' ? 'AC' : "C"
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
       <Text style={styles.computedValue}>{displayValue}</Text>
       <Row>
-        <Button value="C" buttonStyle="secondary" onPress={handleButtonClick} />
+        <Button value={changedValue} buttonStyle="secondary" onPress={handleButtonClick} />
         <Button value="+/-" buttonStyle="secondary" onPress={handleButtonClick} />
         <Button value="%" buttonStyle="secondary" onPress={handleButtonClick} />
-        <Button value="/" buttonStyle="accent" onPress={handleButtonClick} />
+        <Button value="÷" buttonStyle="accent" onPress={handleButtonClick} />
       </Row>
       <Row>
         <Button value="7" onPress={handleButtonClick} />
